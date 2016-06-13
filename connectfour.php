@@ -85,16 +85,13 @@ function score($board,$me,$opponent,$colToPlay,$depth){
     }
   }
   if($full){
-   echo "full";
    return 0;
   }
   
-  if($depth < 10){
-    echo "depth";
+  if($depth < 5){
    return $depth - better_col($newBoard,$opponent,$me,$depth + 1);
     
   }else{
-    echo "zero";
     return 0;
   }
 }
