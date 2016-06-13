@@ -88,7 +88,7 @@ function score($board,$me,$opponent,$colToPlay,$depth){
    return 0;
   }
   
-  if($depth < 5){
+  if($depth < 10){
    return 0 - better_col($newBoard,$opponent,$me,$depth + 1);
     
   }else{
