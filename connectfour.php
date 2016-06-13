@@ -79,7 +79,7 @@ function score($board,$me,$opponent,$colToPlay,$depth){
   //if grid is full
   $full = true;
   for($i = 0; $i < 7; $i++){
-    if($newBoard == " "){
+    if($newBoard == "+"){
       $full = false;
       break;
     }
@@ -89,7 +89,7 @@ function score($board,$me,$opponent,$colToPlay,$depth){
   }
   
   if($depth < 5){
-   return 0 - better_col($newBoard,$opponent,$me,$depth + 1) + $depth;
+   return 0 - better_col($newBoard,$opponent,$me,$depth + 1);
     
   }else{
     return 0;
