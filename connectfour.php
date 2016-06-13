@@ -12,7 +12,7 @@ function score($board,$me,$opponent,$colToPlay,$depth){
   
   $newBoard = $board;
   //add cell
-  for($y = 0; $board[$y][$colToPlay] <> " "; $y++){
+  for($y = 0; $board[$y][$colToPlay] <> "+"; $y++){
   }
   $newBoard[$y][$colToPlay] = $me;
   
@@ -22,7 +22,6 @@ function score($board,$me,$opponent,$colToPlay,$depth){
   for($i = 0 ; $i < 4; $i++){
     $searchValue.=$me;
   }
-  
   //horizontaly
   $line="";
   for ($i=0; $i < 7; $i++){
@@ -69,11 +68,12 @@ function score($board,$me,$opponent,$colToPlay,$depth){
     $ix = -$b;
   }
   $line="";
-  
   for ($jx = $ix , $jy = $iy ; ($jx < 7) && ($jy < 6) ; $jx++ , $jy++){
        $line.=$newBoard[$jy][$jx];
-  }
+	}
   if(strpos($searchValue,$line) > -1){
+	 echo "|->".htmlentities($line).strpos($searchValue,$line)."|\n"; 
+	 print_r($newBoard);
     return 42;
   }
   
@@ -86,11 +86,11 @@ function score($board,$me,$opponent,$colToPlay,$depth){
     }
   }
   if($full){
-    return 0;
+   return 0;
   }
   
-  if($depth < 3){
-    return 0 - better_col($newBoard,$opponent,$me,$depth + 1);
+  if($depth < 5){
+   return 0 - better_col($newBoard,$opponent,$me,$depth + 1);
     
   }else{
     return 0;
@@ -101,20 +101,24 @@ function better_col($board,$me,$opponent,$depth){
   $betterScore= -1000;
   $betterCol= -1;
   for( $i = 0; $i < 7; $i++){
-    if($board[5][$i] == " "){
+    if($board[5][$i] == "+"){
       $sc = score($board,$me,$opponent,$i,$depth);
+        if($depth == 0){
+               echo $i." ".$sc."\n"; 
+        }
+
       if( $sc > $betterScore){
 	$betterScore = $sc;
-	$betterCol = $i;
+	$betterCol = $i - $depth;
       }
     }
   }
   
-  return $i;
+  return $betterCol;
 }
 
 //replace "" by " ", it will simplify my code.
-$in=str_replace('""','" "',file_get_contents('php://input'));
+$in=str_replace('""','"+"',file_get_contents('php://input'));
 
 $params=json_decode($in, TRUE);
 switch($params['action']){
@@ -125,7 +129,7 @@ switch($params['action']){
 		//find $opponent
 		for($x = 0; $x < 7 ; $x++){
 		  for($y = 0; $y < 6 ; $y++){
-		    if(($params['board'][$y][$x] <> " " ) && ($params['board'][$y][$x] <> $params['you'] )){
+		    if(($params['board'][$y][$x] <> "+" ) && ($params['board'][$y][$x] <> $params['you'] )){
 		      $opponent= $params['board'][$y][$x];
 		    }
 		  }
@@ -135,7 +139,8 @@ switch($params['action']){
 		}elseif(!isset($opponent)){
 		  $opponent="X";
 		}
-		echo '{"play":"'.better_col($params['board'],$params['you'],$opponent,0).'"}';
+
+	echo '{"play":"'.better_col($params['board'],$params['you'],$opponent,0).'"}';
 		break;
 	default:
 		break;

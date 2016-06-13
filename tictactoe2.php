@@ -17,7 +17,6 @@ if($message['action'] == "init"){
   die;
 }
 
-
 function score_case($map,$me,$him,$case,$depth=0){
   if($depth%2 == 0){
    $isOpponent = false; 
@@ -48,10 +47,14 @@ function score_case($map,$me,$him,$case,$depth=0){
 	}
 
     }else{
-      if($depth == 9){
+      if($depth == 4){
 	return 0;
       }else{
-	$sc=choose_better_cell($newMap,$him,$me,$depth + 1);
+	if($isOpponent){
+ 		$sc=choose_better_cell($newMap,$him,$me,$depth);	
+	}else{
+		$sc=choose_better_cell($newMap,$him,$me,$depth + 1);
+	}
 	return -$sc[1];
       }
     }
