@@ -115,7 +115,7 @@ function better_col($board,$me){
   $betterCol= -1;
   for( $i = 0; $i < 7; $i++){
     if($board[5][$i] == ""){
-      $sc = score($board,$me,$i)
+      $sc = score($board,$me,$i);
       if( score($board,$me,$i) > $betterScore){
 	$betterScore = $sc;
 	$betterCol = $i;
