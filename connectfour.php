@@ -96,11 +96,25 @@ function score($board,$me,$opponent,$colToPlay,$depth){
     return 0;
   }
 }
-
+/*
 function worst_col($board,$me,$opponent,$depth){
-  
+  $worstScore= 1000;
+  $worstCol= -1;
+  for( $i = 0; $i < 7; $i++){
+    if($board[5][$i] == "+"){
+      $sc = score($board,$me,$opponent,$i,$depth);
+      if( $sc < $worstScore){
+	$worstScore = $sc -$depth;
+	$worstCol = $i;
+	//echo $i.":".$sc."|";
+      }
+    }
+  }  
+  return $betterCo
   
 }
+*/
+
 function better_col($board,$me,$opponent,$depth){
   $betterScore= -1000;
   $betterCol= -1;
@@ -108,7 +122,7 @@ function better_col($board,$me,$opponent,$depth){
     if($board[5][$i] == "+"){
       $sc = score($board,$me,$opponent,$i,$depth);
       if( $sc > $betterScore){
-	$betterScore = $sc -$depth;
+	$betterScore = $sc;
 	$betterCol = $i;
 	//echo $i.":".$sc."|";
       }
