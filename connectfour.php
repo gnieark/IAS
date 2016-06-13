@@ -100,7 +100,7 @@ function score($board,$me,$colToPlay){
       return;
     }
     
-    */
+   */
   
   
   
