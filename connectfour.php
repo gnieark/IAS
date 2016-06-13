@@ -101,7 +101,7 @@ function better_col($board,$me,$opponent,$depth){
   $betterScore= -1000;
   $betterCol= -1;
   for( $i = 0; $i < 7; $i++){
-    if($board[5][$i] == ""){
+    if($board[5][$i] == " "){
       $sc = score($board,$me,$opponent,$i,$depth);
       if( score($board,$me,$i) > $betterScore){
 	$betterScore = $sc;
