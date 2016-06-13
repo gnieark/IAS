@@ -125,7 +125,7 @@ switch($params['action']){
 		//find $opponent
 		for($x = 0; $x < 7 ; $x++){
 		  for($y = 0; $y < 6 ; $y++){
-		    if($params['board'][$y][$x] <> " " ) && ($params['board'][$y][$x] <> $params['you'] ){
+		    if(($params['board'][$y][$x] <> " " ) && ($params['board'][$y][$x] <> $params['you'] )){
 		      $opponent= $params['board'][$y][$x];
 		    }
 		  }
