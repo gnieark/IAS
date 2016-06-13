@@ -36,7 +36,7 @@ function score($board,$me,$opponent,$colToPlay,$depth){
   for ($i=0; $i < 6; $i++){
       $line.=$newBoard[$i][$colToPlay];
   }
-  echo $line."p".strpos($searchValue,$line)."\n";
+  echo $line."p".strpos($searchValue,$line)."|\n";
   if(strpos($searchValue,$line)){
     return 42 - $depth;
   }
