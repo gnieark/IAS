@@ -127,13 +127,14 @@ function better_col($board,$me){
 }
 
 $in=preg_replace('/""/','" "',file_get_contents('php://input'));
-echo $in;
+
 $params=json_decode($in, TRUE);
 switch($params['action']){
 	case "init":
 		echo '{"name":"Gnieark"}';
 		break;
 	case "play-turn":
+		echo $in;
 		echo '{"play":"'.better_col($params['board'],$params['you']).'"}';
 		break;
 	default:
