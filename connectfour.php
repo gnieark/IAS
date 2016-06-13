@@ -89,7 +89,7 @@ function score($board,$me,$opponent,$colToPlay,$depth){
   }
   
   if($depth < 5){
-   return 0 - better_col($newBoard,$opponent,$me,$depth + 1);
+   return 0 - better_col($newBoard,$opponent,$me,$depth + 1) + $depth;
     
   }else{
     return 0;
@@ -135,7 +135,7 @@ switch($params['action']){
 		  $opponent="X";
 		}
 
-	echo '{"play":"'.better_col($params['board'],$params['you'],$opponent,0).'"}';
+	echo '{"play":"'.better_col($params['board'],$params['you'],$opponent,1).'"}';
 		break;
 	default:
 		break;
