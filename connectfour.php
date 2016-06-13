@@ -56,7 +56,7 @@ function score($board,$me,$opponent,$colToPlay,$depth){
       $line.=$newBoard[$jy][$jx];
   }
   if(strpos($searchValue,$line)){
-    return 42;
+      return 42;
   }
   //diagonal /
   $b = $y - $colToPlay;
@@ -69,9 +69,9 @@ function score($board,$me,$opponent,$colToPlay,$depth){
   }
   $line="";
 
-   for ($jx = $ix , $jy = $iy ; ($jx < 7) && ($jy < 6) ; $jx++ , $jy++){
-       			$line.=$newBoard[$jy][$jx];
-	}
+  for ($jx = $ix , $jy = $iy ; ($jx < 7) && ($jy < 6) ; $jx++ , $jy++){
+   $line.=$newBoard[$jy][$jx];
+  }
   if(strpos($searchValue,$line)){
     return 42;
   }
@@ -85,13 +85,16 @@ function score($board,$me,$opponent,$colToPlay,$depth){
     }
   }
   if($full){
+   echo "full";
    return 0;
   }
   
   if($depth < 10){
-   return 0 - better_col($newBoard,$opponent,$me,$depth + 1);
+    echo "depth";
+   return $depth - better_col($newBoard,$opponent,$me,$depth + 1);
     
   }else{
+    echo "zero";
     return 0;
   }
 }
@@ -105,10 +108,11 @@ function better_col($board,$me,$opponent,$depth){
       if( $sc > $betterScore){
 	$betterScore = $sc -$depth;
 	$betterCol = $i;
+	echo $i.":".$sc."|";
       }
-      echo $i." ".$sc."\n";
     }
   }
+  echo "\n";
   
   return $betterCol;
 }
