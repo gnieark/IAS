@@ -27,7 +27,7 @@ function score($board,$me,$opponent,$colToPlay,$depth){
   for ($i=0; $i < 7; $i++){
       $line.=$newBoard[$y][$i]; 
   }
-  if(strpos($searchValue,$line)){
+  if(strpos($searchValue,$line)  !== false ){
     return 42 - $depth;
   }
    
@@ -36,8 +36,8 @@ function score($board,$me,$opponent,$colToPlay,$depth){
   for ($i=0; $i < 6; $i++){
       $line.=$newBoard[$i][$colToPlay];
   }
-  echo $line."p".$searchValue." ".strpos($searchValue,$line)."|\n";
-  if(strpos($searchValue,$line)){
+  //echo $line."p".$searchValue." ".strpos($searchValue,$line)."|\n";
+  if(strpos($searchValue,$line) !== false){
     return 42 - $depth;
   }
   
@@ -56,7 +56,7 @@ function score($board,$me,$opponent,$colToPlay,$depth){
   for($jx = $ix, $jy = $iy; ($jx < 7) && ($jy > -1); $jx++, $jy--){
       $line.=$newBoard[$jy][$jx];
   }
-  if(strpos($searchValue,$line)){
+  if(strpos($searchValue,$line) !== false ){
       return 42 - $depth;
   }
   //diagonal /
@@ -73,7 +73,7 @@ function score($board,$me,$opponent,$colToPlay,$depth){
   for ($jx = $ix , $jy = $iy ; ($jx < 7) && ($jy < 6) ; $jx++ , $jy++){
    $line.=$newBoard[$jy][$jx];
   }
-  if(strpos($searchValue,$line)){
+  if(strpos($searchValue,$line) !== false){
     return 42 - $depth;
   }
   
