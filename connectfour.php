@@ -91,7 +91,7 @@ function score($board,$me,$opponent,$colToPlay,$depth){
   
   if($depth < 7){
   //CO
-   return 42 - better_col($newBoard,$opponent,$me,$depth + 1);
+   return 42 - better_col($newBoard,$opponent,$me,$depth + 1) + $depth;
   }else{
     return 0;
   }
