@@ -71,6 +71,9 @@ function score($board,$me,$colToPlay){
   if(strpos($searchValue,$line) > -1){
     return 42;
   }
+  
+  
+  
   /*
     //diagonal / affin function like y=x+b
     b = parseInt(y - x);
@@ -123,7 +126,8 @@ function better_col($board,$me){
   return $i;
 }
 
-$in=file_get_contents('php://input');
+$in=preg_replace('/""/','" "',file_get_contents('php://input');
+echo $in;
 $params=json_decode($in, TRUE);
 switch($params['action']){
 	case "init":
