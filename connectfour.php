@@ -8,11 +8,11 @@ header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 * choose by random a free column
 */
 
-function score($board,$me,$colToPlay){
+function score($board,$me,$opponent,$colToPlay,$depth){
   
   $newBoard = $board;
   //add cell
-  for($y = 0; $board[$y][$colToPlay] <> ""; $y++){
+  for($y = 0; $board[$y][$colToPlay] <> " "; $y++){
   }
   $newBoard[$y][$colToPlay] = $me;
   
@@ -26,11 +26,7 @@ function score($board,$me,$colToPlay){
   //horizontaly
   $line="";
   for ($i=0; $i < 7; $i++){
-    if ($newBoard[$y][$i] == ""){
-      $line.=" ";
-    }else{
-      $line.=$newBoard[$y][$i];
-    }
+      $line.=$newBoard[$y][$i]; 
   }
   if(strpos($searchValue,$line) > -1){
     return 42;
@@ -39,11 +35,7 @@ function score($board,$me,$colToPlay){
   //verticaly
   $line="";
   for ($i=0; $i < 6; $i++){
-    if ($newBoard[$i][$colToPlay] == ""){
-      $line.=" ";
-    }else{
       $line.=$newBoard[$i][$colToPlay];
-    }
   }
   if(strpos($searchValue,$line) > -1){
     return 42;
@@ -62,60 +54,55 @@ function score($board,$me,$colToPlay){
     $iy = 5;
   }
   for($jx = $ix, $jy = $iy; ($jx < 7) && ($jy > -1); $jx++, $jy--){
-    if($newBoard[$jy][$jx] == ""){
-      $line.=" ";
-    }else{
       $line.=$newBoard[$jy][$jx];
-    }
+  }
+  if(strpos($searchValue,$line) > -1){
+    return 42;
+  }
+  //diagonal /
+  $b = $y - $colToPlay;
+  if($b > -1){
+    $ix = 0;
+    $iy = $b;
+  }else{
+    $iy=0;
+    $ix = -$b;
+  }
+  $line="";
+  
+  for ($jx = kx , $jy = ky ; ($jx < 7) && ($jy < 6) ; $jx++ , $jy++){
+       $line.=$newBoard[$jy][$jx];
   }
   if(strpos($searchValue,$line) > -1){
     return 42;
   }
   
-  
-  
-  /*
-    //diagonal / affin function like y=x+b
-    b = parseInt(y - x);
-    if( b > -1){
-        //first point has x=0
-        kx = 0;
-        ky = b
-
-    }else{
-        //first point has y=0
-        ky = 0;
-        kx = -b;
+  //if grid is full
+  $full = true;
+  for($i = 0; $i < 7; $i++){
+    if($newBoard == " "){
+      $full = false;
+      break;
     }
-    
-    var line="";
-    var lx , ly;
-    for (lx = kx , ly = ky ; (lx < 7) && (ly < 6) ; lx++ , ly++){
-       if( board[ly][lx] == ""){
-            line += " ";
-        }else{
-            line += board[ly][lx];
-        }   
-    }
-    
-    if (line.indexOf(searchValue) > -1){
-      wins(currentPlayer);
-      return;
-    }
-    
-   */
+  }
+  if($full){
+    return 0;
+  }
   
-  
-  
-
+  if($depth < 5){
+    return 0 - better_col($newBoard,$opponent,$me,$depth + 1);
+    
+  }else{
+    return 0;
+  }
 }
 
-function better_col($board,$me){
+function better_col($board,$me,$opponent,$depth){
   $betterScore= -1000;
   $betterCol= -1;
   for( $i = 0; $i < 7; $i++){
     if($board[5][$i] == ""){
-      $sc = score($board,$me,$i);
+      $sc = score($board,$me,$opponent,$i,$depth);
       if( score($board,$me,$i) > $betterScore){
 	$betterScore = $sc;
 	$betterCol = $i;
@@ -126,6 +113,7 @@ function better_col($board,$me){
   return $i;
 }
 
+//replace "" by " ", it will simplify my code.
 $in=str_replace('""','" "',file_get_contents('php://input'));
 
 $params=json_decode($in, TRUE);
@@ -134,8 +122,20 @@ switch($params['action']){
 		echo '{"name":"Gnieark"}';
 		break;
 	case "play-turn":
-		echo $in;
-		echo '{"play":"'.better_col($params['board'],$params['you']).'"}';
+		//find $opponent
+		for($x = 0; $x < 7 ; $x++){
+		  for($y = 0; $y < 6 ; $y++){
+		    if($params['board'][$y][$x] <> " " ) && ($params['board'][$y][$x] <> $params['you'] ){
+		      $opponent= $params['board'][$y][$x];
+		    }
+		  }
+		}
+		if((!isset($opponent)) && ($params['you'] == "X")){
+		  $opponent="O";
+		}elseif(!isset($opponent)){
+		  $opponent="X";
+		}
+		echo '{"play":"'.better_col($params['board'],$params['you'],$opponent,0).'"}';
 		break;
 	default:
 		break;
