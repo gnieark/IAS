@@ -27,7 +27,7 @@ function score($board,$me,$opponent,$colToPlay,$depth){
   for ($i=0; $i < 7; $i++){
       $line.=$newBoard[$y][$i]; 
   }
-  if(strpos($searchValue,$line) > -1){
+  if(strpos($searchValue,$line)){
     return 42;
   }
    
@@ -36,7 +36,7 @@ function score($board,$me,$opponent,$colToPlay,$depth){
   for ($i=0; $i < 6; $i++){
       $line.=$newBoard[$i][$colToPlay];
   }
-  if(strpos($searchValue,$line) > -1){
+  if(strpos($searchValue,$line)){
     return 42;
   }
   
@@ -55,7 +55,7 @@ function score($board,$me,$opponent,$colToPlay,$depth){
   for($jx = $ix, $jy = $iy; ($jx < 7) && ($jy > -1); $jx++, $jy--){
       $line.=$newBoard[$jy][$jx];
   }
-  if(strpos($searchValue,$line) > -1){
+  if(strpos($searchValue,$line)){
     return 42;
   }
   //diagonal /
@@ -68,12 +68,11 @@ function score($board,$me,$opponent,$colToPlay,$depth){
     $ix = -$b;
   }
   $line="";
-  for ($jx = $ix , $jy = $iy ; ($jx < 7) && ($jy < 6) ; $jx++ , $jy++){
-       $line.=$newBoard[$jy][$jx];
+
+   for ($jx = $ix , $jy = $iy ; ($jx < 7) && ($jy < 6) ; $jx++ , $jy++){
+       			$line.=$newBoard[$jy][$jx];
 	}
-  if(strpos($searchValue,$line) > -1){
-	 echo "|->".htmlentities($line).strpos($searchValue,$line)."|\n"; 
-	 print_r($newBoard);
+  if(strpos($searchValue,$line)){
     return 42;
   }
   
@@ -103,10 +102,6 @@ function better_col($board,$me,$opponent,$depth){
   for( $i = 0; $i < 7; $i++){
     if($board[5][$i] == "+"){
       $sc = score($board,$me,$opponent,$i,$depth);
-        if($depth == 0){
-               echo $i." ".$sc."\n"; 
-        }
-
       if( $sc > $betterScore){
 	$betterScore = $sc;
 	$betterCol = $i - $depth;
