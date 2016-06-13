@@ -14,7 +14,7 @@ function score($board,$me,$colToPlay){
   //add cell
   for($y = 0; $board[$y][$colToPlay] <> ""; $y++){
   }
-  $newBoard[$y,$colToPlay] = $me;
+  $newBoard[$y][$colToPlay] = $me;
   
   //do I win?
     
