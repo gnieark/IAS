@@ -106,7 +106,7 @@ function better_col($board,$me,$opponent,$depth){
 	$betterScore = $sc -$depth;
 	$betterCol = $i;
       }
-      //echo $i." ".$sc."\n";
+      echo $i." ".$sc."\n";
     }
   }
   
