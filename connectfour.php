@@ -90,12 +90,17 @@ function score($board,$me,$opponent,$colToPlay,$depth){
   }
   
   if($depth < 7){
-   return $depth - better_col($newBoard,$opponent,$me,$depth + 1);
+  //CO
+   return 0 - better_col($newBoard,$opponent,$me,$depth + 1);
   }else{
     return 0;
   }
 }
 
+function worst_col($board,$me,$opponent,$depth){
+  
+  
+}
 function better_col($board,$me,$opponent,$depth){
   $betterScore= -1000;
   $betterCol= -1;
