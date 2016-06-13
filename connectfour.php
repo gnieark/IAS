@@ -126,7 +126,7 @@ function better_col($board,$me){
   return $i;
 }
 
-$in=preg_replace('/""/','" "',file_get_contents('php://input');
+$in=preg_replace('/""/','" "',file_get_contents('php://input'));
 echo $in;
 $params=json_decode($in, TRUE);
 switch($params['action']){
