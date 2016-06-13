@@ -103,10 +103,10 @@ function better_col($board,$me,$opponent,$depth){
     if($board[5][$i] == "+"){
       $sc = score($board,$me,$opponent,$i,$depth);
       if( $sc > $betterScore){
-	$betterScore = $sc;
-	$betterCol = $i - $depth;
+	$betterScore = $sc -$depth;
+	$betterCol = $i;
       }
-      echo $i." ".$sc."\n";
+      //echo $i." ".$sc."\n";
     }
   }
   
