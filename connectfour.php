@@ -70,7 +70,7 @@ function score($board,$me,$opponent,$colToPlay,$depth){
   }
   $line="";
   
-  for ($jx = kx , $jy = ky ; ($jx < 7) && ($jy < 6) ; $jx++ , $jy++){
+  for ($jx = $ix , $jy = $iy ; ($jx < 7) && ($jy < 6) ; $jx++ , $jy++){
        $line.=$newBoard[$jy][$jx];
   }
   if(strpos($searchValue,$line) > -1){
