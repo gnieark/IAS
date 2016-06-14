@@ -170,7 +170,7 @@ switch($params['action']){
 
                     //diagonales \
                     $diagStr="";
-                    for($x=0 , $y=$k isset($params['board'][$y][$x]); $x++, $y--){
+                    for($x=0 , $y=$k; isset($params['board'][$y][$x]); $x++, $y--){
                         $diagStr.=$params['board'][$y][$x];
                     }
                    if(can_win($diagStr,$params['you']) !== false){
@@ -194,7 +194,7 @@ switch($params['action']){
 		$colAvailable=array();
 		//dont play on full colomns
 		for($i=0;$i<7;$i++){
-  			if(($grid[5][$i] == "+") OR ($grid[5][$i] == "_")){
+  			if(($params['board'][5][$i] == "+") OR ($params['board'][5][$i] == "_")){
     				$colAvailable[]=$i;
   			}
 		}

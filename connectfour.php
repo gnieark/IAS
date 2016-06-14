@@ -28,7 +28,7 @@ function score($board,$me,$opponent,$colToPlay,$depth){
       $line.=$newBoard[$y][$i]; 
   }
   if(strpos($searchValue,$line)  !== false ){
-    return 42;
+    return 200;
   }
    
   //verticaly
@@ -38,7 +38,7 @@ function score($board,$me,$opponent,$colToPlay,$depth){
   }
   //echo $line."p".$searchValue." ".strpos($searchValue,$line)."|\n";
   if(strpos($searchValue,$line) !== false){
-    return 42;
+    return 200;
   }
   
   
@@ -57,7 +57,7 @@ function score($board,$me,$opponent,$colToPlay,$depth){
       $line.=$newBoard[$jy][$jx];
   }
   if(strpos($searchValue,$line) !== false ){
-      return 42;
+      return 200;
   }
   //diagonal /
   $b = $y - $colToPlay;
@@ -74,7 +74,7 @@ function score($board,$me,$opponent,$colToPlay,$depth){
    $line.=$newBoard[$jy][$jx];
   }
   if(strpos($searchValue,$line) !== false){
-    return 42;
+    return 200;
   }
   
   //if grid is full
@@ -89,7 +89,7 @@ function score($board,$me,$opponent,$colToPlay,$depth){
    return 0;
   }
   
-  if($depth < 7){
+  if($depth < 6){
   //CO
    if(($depth % 2) == 0){  
     return better_col($newBoard,$opponent,$me,$depth + 1) - $depth;
