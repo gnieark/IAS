@@ -74,7 +74,7 @@ function should_opponent_win_if_i_play_at($map,$me,$opponent,$colToPlay){
     return false;
   }
   
-  for($y = 0; (($map[$y][$colToPlay] <> "+") && ($map[$y][$colToPlay] <> "-")) && ; $y++){
+  for($y = 0; (($map[$y][$colToPlay] <> "+") && ($map[$y][$colToPlay] <> "-")); $y++){
   }
   
   $map[$y][$colToPlay] = $me;
