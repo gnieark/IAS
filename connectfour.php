@@ -63,6 +63,25 @@ function can_loose($line,$hisChar){
     return false;
     
 }
+function should_opponent_win_if_i_play_at($map,$me,$opponent,$colToPlay){
+  //j'ouvre l'a possibilité à l'adversaire de jouer au dessus de mon pion
+  // est-ce une connerie?
+  
+  if(($map[4][$colToPlay] == $me) OR ($map[4][$colToPlay] == $opponent)){
+    //top of the grid
+    return false;
+  }
+  
+  for($y = 0; (($map[$y][$colToPlay] <> "+") && ($map[$y][$colToPlay] <> "-")) && ; $y++){
+  }
+  
+  $map[$y][$colToPlay] = $me;
+  
+  //tester les lignes qui passent pas $y+1,$colToPlay
+  //to do
+  
+
+}
 //replace "" by " ", it will simplify my code.
 $in=str_replace('""','"-"',file_get_contents('php://input'));
 
