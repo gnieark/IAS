@@ -42,6 +42,7 @@ function can_win($line,$myChar){
     return false;
 }
 function can_loose($line,$hisChar){
+
     //je pourrai perdre aux 2 prochains tours de jeu
     // retourne la place du caractere à remplacer pour éviter ça
     if (strpos($line,"+".$hisChar.$hisChar.$hisChar)  !== false ){
@@ -114,7 +115,7 @@ switch($params['action']){
                         die;
                     }
                     if (can_loose($colStr,$opponent) !== false){
-                        $colForNoLose = $x;
+			$colForNoLose = $x;
 	             }
 		}
 		
@@ -150,7 +151,7 @@ switch($params['action']){
                     }
                     if (can_loose($diagStr,$opponent) !== false){
                      $colForNoLose = $k + can_loose($diagStr,$opponent);
-                    }
+		    }
                     
                     //diagonale \
                     $diagStr="";
@@ -162,7 +163,7 @@ switch($params['action']){
                         die;
                     }
                     if (can_loose($diagStr,$opponent) !== false){
-                        $colForNoLose = ($k + can_loose($diagStr,$opponent));
+			$colForNoLose = ($k + can_loose($diagStr,$opponent));
                     } 
                     
                     
@@ -174,11 +175,11 @@ switch($params['action']){
                         $diagStr.=$params['board'][$y][$x];
                     }
                    if(can_win($diagStr,$params['you']) !== false){
-                        echo '{"play":'.$x.'}';
+                        echo '{"play":'.can_win($diagStr,$opponent).'}';
                         die;
                     }
                     if (can_loose($diagStr,$opponent) !== false){
-                        $colForNoLose = $x;
+			 $colForNoLose =  can_loose($diagStr,$opponent);
                     }
 		}
 		for ($k = 3 ; $k < 6 ; $k++){
@@ -189,11 +190,11 @@ switch($params['action']){
                         $diagStr.=$params['board'][$y][$x];
                     }
                    if(can_win($diagStr,$params['you']) !== false){
-                        echo '{"play":'.$x.'}';
+                        echo '{"play":'.can_win($diagStr,$params['you']).'}';
                         die;
                     }
                     if (can_loose($diagStr,$opponent) !== false){
-                        $colForNoLose = $x;
+			 $colForNoLose = can_loose($diagStr,$opponent);
                     }
                    
                 }
