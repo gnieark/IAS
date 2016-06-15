@@ -27,7 +27,6 @@ header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 
 function can_win($line,$myChar){
     //retourne la position du caractere a remplacer dans la ligne pour gagner
-
     if (strpos($line,"+".$myChar.$myChar.$myChar)  !== false ){
         return strpos($line,"+".$myChar.$myChar.$myChar);
     }
@@ -64,7 +63,7 @@ function can_loose($line,$hisChar){
     
 }
 //replace "" by " ", it will simplify my code.
-$in=str_replace('""','"_"',file_get_contents('php://input'));
+$in=str_replace('""','"-"',file_get_contents('php://input'));
 
 $params=json_decode($in, TRUE);
 switch($params['action']){
@@ -77,16 +76,20 @@ switch($params['action']){
 		  for($y = 0; $y < 6 ; $y++){
 		  
                     //find opponent
-		    if(($params['board'][$y][$x] <> "_" ) && ($params['board'][$y][$x] <> $params['you'] )){
+		    if(($params['board'][$y][$x] <> "-" ) && ($params['board'][$y][$x] <> $params['you'] )){
 		      $opponent= $params['board'][$y][$x];
 		    }
 		    
 		    //tester si la case est jouable (s'il y a un support en dessous)
-		    if  (($params['board'][$y][$x] == "_" )   
-                        AND (($y==0) OR ($params['board'][$y - 1][$x] <> "_"))
-                        ){
+		    if  ($params['board'][$y][$x] == "-" ){   
+                        //AND (($y==0) OR ($params['board'][$y - 1][$x] !== "-"))
+                        //){
                         //la case est jouable, je la marque par un "+"
-                        $params['board'][$y][$x] = "+";
+			if($y == 0){
+                        	$params['board'][$y][$x] = "+";
+			}elseif(($params['board'][$y -1 ][$x] !== "-") AND ($params['board'][$y -1 ][$x] !== "+")){
+				$params['board'][$y][$x] = "+";
+			}else{}
 		    }
 		  }
 		}
@@ -206,7 +209,7 @@ switch($params['action']){
 		$colAvailable=array();
 		//dont play on full colomns
 		for($i=0;$i<7;$i++){
-  			if(($params['board'][5][$i] == "+") OR ($params['board'][5][$i] == "_")){
+  			if(($params['board'][5][$i] == "+") OR ($params['board'][5][$i] == "-")){
     				$colAvailable[]=$i;
   			}
 		}
