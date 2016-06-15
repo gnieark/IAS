@@ -76,7 +76,7 @@ function should_opponent_win_if_i_play_at($map,$me,$opponent,$colToPlay){
   }
   
   $map[$y][$colToPlay] = $me;
-  
+  $map[$y +1][$colToPlay] = "+";
   //tester les lignes qui passent pas $y+1,$colToPlay
   //to do
   
