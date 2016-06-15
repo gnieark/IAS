@@ -115,7 +115,7 @@ switch($params['action']){
                     }
                     if (can_loose($colStr,$opponent) !== false){
                         $colForNoLose = $x;
-                    }
+	             }
 		}
 		
 		//horizontales
@@ -129,7 +129,7 @@ switch($params['action']){
                         die;
                     }
                     if (can_loose($lnStr,$opponent) !== false){
-                        $colForNoLose = can_loose($lnStr,$opponent);
+                      $colForNoLose = can_loose($lnStr,$opponent);
                     }
                     
 		}
@@ -145,11 +145,11 @@ switch($params['action']){
                         $diagStr.=$params['board'][$y][$x];
                     }
                    if(can_win($diagStr,$params['you']) !== false){
-                        echo '{"play":'.$x.'}';
+                        echo '{"play":'.($k + can_win($diagStr,$params['you'])).'}';
                         die;
                     }
                     if (can_loose($diagStr,$opponent) !== false){
-                        $colForNoLose = $x;
+                     $colForNoLose = $k + can_loose($diagStr,$opponent);
                     }
                     
                     //diagonale \
@@ -158,11 +158,11 @@ switch($params['action']){
                     $diagStr.=$params['board'][$y][$x];
                     }
                    if(can_win($diagStr,$params['you']) !== false){
-                        echo '{"play":'.$x.'}';
+                        echo '{"play":'.($k + can_win($diagStr,$params['you'])).'}';
                         die;
                     }
                     if (can_loose($diagStr,$opponent) !== false){
-                        $colForNoLose = $x;
+                        $colForNoLose = ($k + can_loose($diagStr,$opponent));
                     } 
                     
                     
