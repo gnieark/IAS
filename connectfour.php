@@ -41,7 +41,7 @@ function can_win($line,$myChar){
     }
     return false;
 }
-function can_loose($line,$hisChar,$depth=0;){
+function can_loose($line,$hisChar,$depth=0){
     if ($depth == 0){
         //je pourrai perdre aux 2 prochains tours de jeu
         // retourne la place du caractere à remplacer pour éviter ça
