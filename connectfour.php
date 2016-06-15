@@ -28,25 +28,37 @@ header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 function can_win($line,$myChar){
     //retourne la position du caractere a remplacer dans la ligne pour gagner
 
-    if (strpos("+".$myChar.$myChar.$myChar,$line)  !== false ){
-        return strpos("+".$myChar.$myChar.$myChar,$line);
+    if (strpos($line,"+".$myChar.$myChar.$myChar)  !== false ){
+        return strpos($line,"+".$myChar.$myChar.$myChar);
     }
-    if (strpos($myChar.$myChar.$myChar."+",$line)  !== false ){
-        return strpos($myChar.$myChar.$myChar."+",$line) + 3;
+    if (strpos($line,$myChar."+".$myChar.$myChar)  !== false ){
+        return strpos($line,$myChar."+".$myChar.$myChar) + 1;
+    }
+    if (strpos($line,$myChar.$myChar."+".$myChar)  !== false ){
+        return strpos($line,$myChar.$myChar."+".$myChar) + 2;
+    }
+    if (strpos($line,$myChar.$myChar.$myChar."+")  !== false ){
+        return strpos($line,$myChar.$myChar.$myChar."+") + 3;
     }
     return false;
 }
 function can_loose($line,$hisChar){
     //je pourrai perdre aux 2 prochains tours de jeu
     // retourne la place du caractere à remplacer pour éviter ça
-    if (strpos("+".$hisChar.$hisChar.$hisChar,$line)  !== false ){
-        return strpos("+".$hisChar.$hisChar.$hisChar,$line);
+    if (strpos($line,"+".$hisChar.$hisChar.$hisChar)  !== false ){
+        return strpos($line,"+".$hisChar.$hisChar.$hisChar);
     }
-    if (strpos($hisChar.$hisChar.$hisChar."+",$line)  !== false ){
-        return strpos($hisChar.$hisChar.$hisChar."+",$line) + 3;
+    if (strpos($line,$hisChar."+".$hisChar.$hisChar)  !== false ){
+        return strpos($line,$hisChar."+".$hisChar.$hisChar) + 1;
     }
-    if (strpos("+".$hisChar.$hisChar."+",$line)  !== false ){
-        return strpos("+".$hisChar.$hisChar."+",$line);
+    if (strpos($line,$hisChar.$hisChar."+".$hisChar)  !== false ){
+        return strpos($line,$hisChar.$hisChar."+".$hisChar) + 2;
+    }
+    if (strpos($line,$hisChar.$hisChar.$hisChar."+")  !== false ){
+        return strpos($line,$hisChar.$hisChar.$hisChar."+") + 3;
+    }
+    if (strpos($line,"+".$hisChar.$hisChar."+")  !== false ){
+        return strpos($line,"+".$hisChar.$hisChar."+");
     }
     return false;
     
