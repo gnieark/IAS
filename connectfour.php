@@ -25,50 +25,134 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST'); 
 header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
 
-function can_win($line,$myChar){
+function can_win($line,$myChar,$depth=0){
     //retourne la position du caractere a remplacer dans la ligne pour gagner
-    if (strpos($line,"+".$myChar.$myChar.$myChar)  !== false ){
-        return strpos($line,"+".$myChar.$myChar.$myChar);
-    }
-    if (strpos($line,$myChar."+".$myChar.$myChar)  !== false ){
-        return strpos($line,$myChar."+".$myChar.$myChar) + 1;
-    }
-    if (strpos($line,$myChar.$myChar."+".$myChar)  !== false ){
-        return strpos($line,$myChar.$myChar."+".$myChar) + 2;
-    }
-    if (strpos($line,$myChar.$myChar.$myChar."+")  !== false ){
-        return strpos($line,$myChar.$myChar.$myChar."+") + 3;
-    }
-    return false;
-}
-function can_loose($line,$hisChar,$depth=0){
-    if ($depth == 0){
-        //je pourrai perdre aux 2 prochains tours de jeu
-        // retourne la place du caractere à remplacer pour éviter ça
-        if (strpos($line,"+".$hisChar.$hisChar.$hisChar)  !== false ){
-            return strpos($line,"+".$hisChar.$hisChar.$hisChar);
+    $arr=array();
+    if($depth == 0){
+        if (strpos($line,"+".$myChar.$myChar.$myChar)  !== false ){
+            $arr[] = strpos($line,"+".$myChar.$myChar.$myChar);
         }
-        if (strpos($line,$hisChar."+".$hisChar.$hisChar)  !== false ){
-            return strpos($line,$hisChar."+".$hisChar.$hisChar) + 1;
+        if (strpos($line,$myChar."+".$myChar.$myChar)  !== false ){
+            $arr[] = strpos($line,$myChar."+".$myChar.$myChar) + 1;
         }
-        if (strpos($line,$hisChar.$hisChar."+".$hisChar)  !== false ){
-            return strpos($line,$hisChar.$hisChar."+".$hisChar) + 2;
+        if (strpos($line,$myChar.$myChar."+".$myChar)  !== false ){
+            $arr[] = strpos($line,$myChar.$myChar."+".$myChar) + 2;
         }
-        if (strpos($line,$hisChar.$hisChar.$hisChar."+")  !== false ){
-	  return strpos($line,$hisChar.$hisChar.$hisChar."+") + 3;
+        if (strpos($line,$myChar.$myChar.$myChar."+")  !== false ){
+            $arr[] = strpos($line,$myChar.$myChar.$myChar."+") + 3;
         }
     }else{
+        if (strpos($line,"+".$myChar.$myChar."+")  !== false ){
+            $arr[] = strpos($line,"+".$myChar.$myChar."+");
+            $arr[] = strpos($line,"+".$myChar.$myChar."+") + 3;
+        }
+        if (strpos($line,"+".$myChar."+".$myChar)  !== false ){      
+            $arr[] = strpos($line,"+".$myChar."+".$myChar);
+            $arr[] = strpos($line,"+".$myChar."+".$myChar) + 2;
+        }
+        if (strpos($line,$myChar."+".$myChar."+")  !== false ){     
+            $arr[] = strpos($line,$myChar."+".$myChar."+")  + 1;
+            $arr[] = strpos($line,$myChar."+".$myChar."+")  + 3;
+        }
+    }
+    return $arr;
+}
+function can_loose($line,$hisChar,$depth=0){
+    //je pourrai perdre aux 2 prochains tours de jeu
+    // retourne la place du caractere à remplacer pour éviter ça
+    $arr=array();
+    if ($depth == 0){
+
+        if (strpos($line,"+".$hisChar.$hisChar.$hisChar)  !== false ){
+            $arr[] = strpos($line,"+".$hisChar.$hisChar.$hisChar);
+        }
+        if (strpos($line,$hisChar."+".$hisChar.$hisChar)  !== false ){
+            $arr[] = strpos($line,$hisChar."+".$hisChar.$hisChar) + 1;
+        }
+        if (strpos($line,$hisChar.$hisChar."+".$hisChar)  !== false ){
+            $arr[] = strpos($line,$hisChar.$hisChar."+".$hisChar) + 2;
+        }
+        if (strpos($line,$hisChar.$hisChar.$hisChar."+")  !== false ){
+	    $arr[] = strpos($line,$hisChar.$hisChar.$hisChar."+") + 3;
+        }
+        
+    }else{
         if (strpos($line,"+".$hisChar.$hisChar."+")  !== false ){
-            return strpos($line,"+".$hisChar.$hisChar."+");
+            $arr[] = strpos($line,"+".$hisChar.$hisChar."+");
+            $arr[] = strpos($line,"+".$hisChar.$hisChar."+") +3;
         }
         if(strpos($line,"+".$hisChar."+".$hisChar."+")  !== false ){
-	    return strpos($line,"+".$hisChar."+".$hisChar."+") + 2;
+            $arr[] =  strpos($line,"+".$hisChar."+".$hisChar."+");
+	    $arr[] =  strpos($line,"+".$hisChar."+".$hisChar."+") + 2;
+	    $arr[] =  strpos($line,"+".$hisChar."+".$hisChar."+") + 4;
         }
 
     }
-    return false;
+    return $arr;
     
 }
+function array_merge_and_increment_rigth ($arr1,$arr2,$incr){
+    foreach($arr2 as $v){
+        $arr1[] = $v + $incr;
+    }
+    return $arr1;
+}
+function analize($line,$me,$opponent,$isVertical,$decalageX){
+    /*
+    * Etudie les lignes fournies
+    * Joue si une case est gagnante
+    * Sinon, "peuple" des variables
+    * qui permettront de prendre une décision
+    */
+
+    static $colForNoLose = array();
+    static $colForNoLose1 = array();
+    static $canWinDepth1 = array();
+    
+    if(count(can_win($line,$me,0)) > 0){
+        if($isVertical){
+            echo '{"play":'.$decalageX.'}';
+        }else{
+            echo '{"play":'.(can_win($line,$me,0)[0] + $decalageX).'}';
+        }
+        die;
+        
+    }
+    
+    if (count(can_loose($line,$opponent,0)) > 0){
+    
+      if($isVertical){
+            $colForNoLose[] = $decalageX;
+        }else{
+            $colForNoLose = array_merge_and_increment_rigth($colForNoLose ,can_loose($line,$opponent,0),$decalageX);
+        }
+    }
+    
+    
+    if (count(can_loose($line,$opponent,1)) > 0 ){
+        if($isVertical){
+            $colForNoLose1[] = $decalageX;
+        }else{
+            $colForNoLose1 = array_merge_and_increment_rigth($colForNoLose1 ,can_loose($line,$opponent,1),$decalageX);
+        }
+    }
+    if(count(can_win($line,$opponent,1)) > 0){
+        if($isVertical){
+            $canWinDepth1[] = $decalageX;
+        }else{
+            $canWinDepth1= array_merge_and_increment_rigth($canWinDepth1, can_win($line,$me,1), $decalageX);
+        }
+    }
+    
+    return array(
+                'colForNoLose'   => $colForNoLose, 
+                'colForNoLose1'  => $colForNoLose1, 
+                'canWinDepth1'   => $canWinDepth1
+                );
+
+}
+
+
 function should_opponent_win_if_i_play_at($map,$me,$opponent,$colToPlay){
   //j'ouvre l'a possibilité à l'adversaire de jouer au dessus de mon pion
   // est-ce une connerie?
@@ -113,7 +197,6 @@ function should_opponent_win_if_i_play_at($map,$me,$opponent,$colToPlay){
     $kx++;
     $ky++;
   }
-  
   if(strpos($line,$loseStr) !== false){
     return true;
   }
@@ -123,14 +206,15 @@ function should_opponent_win_if_i_play_at($map,$me,$opponent,$colToPlay){
   $kx = $colToPlay;
   $ky = $y;
   
-  while(isset($map[$ky][$kx])){
+  while(isset($map[$ky -1][$kx +1])){
     $kx++;
     $ky--;
   }
+
   while(isset($map[$ky][$kx])){
     $line.=$map[$ky][$kx];
     $kx--;
-    $kx++;
+    $ky++;
   }
   if(strpos($line,$loseStr) !== false){
     return true;
@@ -187,16 +271,7 @@ switch($params['action']){
                     for($y = 0; $y <6; $y ++){
                         $colStr.= $params['board'][$y][$x];
                     }
-                    if(can_win($colStr,$params['you']) !== false){
-                        echo '{"play":'.$x.'}';
-                        die;
-                    }
-                    if (can_loose($colStr,$opponent) !== false){
-			$colForNoLose = $x;
-	             }
-                     if (can_loose($colStr,$opponent,1) !== false){
-			$colForNoLose1 = $x;
-	             }
+                    $choice = analize($colStr,$params['you'],$opponent,true,$x);
 		}
 		
 		//horizontales
@@ -205,17 +280,7 @@ switch($params['action']){
                     for($x = 0; $x <7; $x ++){
                        $lnStr.= $params['board'][$y][$x]; 
                     }
-                    if(can_win($lnStr,$params['you']) !== false){
-                        echo '{"play":'.can_win($lnStr,$params['you']).'}';
-                        die;
-                    }
-                    if (can_loose($lnStr,$opponent) !== false){
-                      $colForNoLose = can_loose($lnStr,$opponent);
-		    }
-                    if (can_loose($lnStr,$opponent,1) !== false){
-                      $colForNoLose1 = can_loose($lnStr,$opponent,1);
-                    }
-                    
+                    $choice = analize($lnStr,$params['you'],$opponent,false,0);
 		}
 		
 		//tester seulement les diagonales >= 4 cases
@@ -227,32 +292,14 @@ switch($params['action']){
                     for($x=$k , $y=0; isset($params['board'][$y][$x]); $x++, $y++){
                         $diagStr.=$params['board'][$y][$x];
                     }
-                   if(can_win($diagStr,$params['you']) !== false){
-                        echo '{"play":'.($k + can_win($diagStr,$params['you'])).'}';
-                        die;
-                    }
-                    if (can_loose($diagStr,$opponent) !== false){
-                     $colForNoLose = $k + can_loose($diagStr,$opponent);
-		    }
-                    if (can_loose($diagStr,$opponent,1) !== false){
-                     $colForNoLose1 = $k + can_loose($diagStr,$opponent,1);
-		    }
+                    $choice = analize($diagStr,$params['you'],$opponent,false,$k);
+                    
                     //diagonale \
                     $diagStr="";
                     for($x=$k , $y=5; isset($params['board'][$y][$x]); $x++, $y--){
                     $diagStr.=$params['board'][$y][$x];
                     }
-                   if(can_win($diagStr,$params['you']) !== false){
-                        echo '{"play":'.($k + can_win($diagStr,$params['you'])).'}';
-                        die;
-                    }
-                    if (can_loose($diagStr,$opponent) !== false){
-			$colForNoLose = ($k + can_loose($diagStr,$opponent));
-                    } 
-                    if (can_loose($diagStr,$opponent,1) !== false){
-			$colForNoLose1 = ($k + can_loose($diagStr,$opponent,1));
-                    } 
-                    
+                    $choice = analize($diagStr,$params['you'],$opponent,false,$k);
                     
 		}		
 		for ($k = 0; $k < 3; $k ++){
@@ -261,16 +308,7 @@ switch($params['action']){
                     for($x = 0, $y = $k ; isset($params['board'][$y][$x]); $x++, $y++){
                         $diagStr.=$params['board'][$y][$x];
                     }
-                   if(can_win($diagStr,$params['you']) !== false){
-                        echo '{"play":'.can_win($diagStr,$opponent).'}';
-                        die;
-                    }
-                    if (can_loose($diagStr,$opponent) !== false){
-			 $colForNoLose =  can_loose($diagStr,$opponent);
-                    }
-                    if (can_loose($diagStr,$opponent,1) !== false){
-			 $colForNoLose1 =  can_loose($diagStr,$opponent,1);
-                    }
+                    $choice = analize($diagStr,$params['you'],$opponent,false,0);
 		}
 		for ($k = 3 ; $k < 6 ; $k++){
 
@@ -279,52 +317,79 @@ switch($params['action']){
                     for($x=0 , $y=$k; isset($params['board'][$y][$x]); $x++, $y--){
                         $diagStr.=$params['board'][$y][$x];
                     }
-                   if(can_win($diagStr,$params['you']) !== false){
-                        echo '{"play":'.can_win($diagStr,$params['you']).'}';
-                        die;
-                    }
-                    if (can_loose($diagStr,$opponent) !== false){
-			 $colForNoLose = can_loose($diagStr,$opponent);
-                    }
-                    if (can_loose($diagStr,$opponent,1) !== false){
-			 $colForNoLose1 = can_loose($diagStr,$opponent,1);
-                    }
-                   
+                     $choice = analize($diagStr,$params['you'],$opponent,false,0);
                 }
+//print_r($choice);                
+                
                 //si j'arrive là, je ne gagne pas à ce tour
-                if(isset($colForNoLose)){
-                    echo '{"play":'.$colForNoLose.'}';
-                    die;               
-                }elseif(isset($colForNoLose1)){
-                     echo '{"play":'.$colForNoLose1.'}';
-                    die;                    
-                }
-
-                //still there? random
-		
-		$colAvailable=array();
-		//dont play on full colomns and where it is dangerous
+                
+                //liste des cases possible moins celles à éviter
+                
+                $colAvailable=array();
 		for($i=0;$i<7;$i++){
-		
   			if((($params['board'][5][$i] == "+") OR ($params['board'][5][$i] == "-"))
                         AND (!should_opponent_win_if_i_play_at($params['board'],$params['you'],$opponent,$i)))
   			{
     				$colAvailable[]=$i;
   			}
 		}
-		
-		if(count($colAvailable) == 0){
-		
-                    for($i=0;$i<7;$i++){
-		
-                            if(($params['board'][5][$i] == "+") OR ($params['board'][5][$i] == "-"))
-                            {
+                if(count($colAvailable) == 0){
+                    //on risque de perdre au prochain tour
+                    for($i=0;$i<7;$i++){		
+                            if(($params['board'][5][$i] == "+") OR ($params['board'][5][$i] == "-")){
                                     $colAvailable[]=$i;
                             }
                     }
+                }
 		
-		}
-		
+                
+                
+                
+                if(count($choice['colForNoLose']) > 0){
+                
+                    //intersection entre $choice['colForNoLose'] et $colAvailable
+                    $intersection = array_intersect($choice['colForNoLose'],$colAvailable);
+                    if(count($intersection) > 0){
+                        shuffle($intersection);
+                        echo '{"play":'.$intersection[0].'}';
+                        die;
+                    }else{
+                        //on pourra perdre au prochain tour, tant pis
+                        shuffle($choice['colForNoLose']);
+                        echo '{"play":'.$choice['colForNoLose'][0].'}';
+                        die;                      
+                    }
+                    
+                }
+                
+                
+                
+                $colForNoLose1 = array_unique($choice['colForNoLose1']);
+                $canWinDepth1 = array_unique($choice['canWinDepth1']);
+                
+                $intersection = array_intersect($colForNoLose1,$colAvailable,$canWinDepth1);
+                if(count($intersection) > 0){
+                    shuffle($intersection);
+                    echo '{"play":'.$intersection[0].'}';
+                    die;
+                }
+                
+                $intersection = array_intersect($colForNoLose1,$colAvailable);
+                if(count($intersection) > 0){
+                    shuffle($intersection);
+                    echo '{"play":'.$intersection[0].'}';
+                    die;
+                }
+                
+                $intersection = array_intersect($colForNoLose1,$canWinDepth1);
+                if(count($intersection) > 0){
+                    shuffle($intersection);
+                    echo '{"play":'.$intersection[0].'}';
+                    die;
+                }
+            
+                //still there? random
+				
 		shuffle($colAvailable);
 		echo '{"play":'.$colAvailable[0].'}';
 
@@ -333,3 +398,6 @@ switch($params['action']){
 	default:
 		break;
 }
+
+
+
