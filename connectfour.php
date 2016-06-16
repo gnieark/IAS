@@ -55,12 +55,16 @@ function can_loose($line,$hisChar,$depth=0){
             return strpos($line,$hisChar.$hisChar."+".$hisChar) + 2;
         }
         if (strpos($line,$hisChar.$hisChar.$hisChar."+")  !== false ){
-            return strpos($line,$hisChar.$hisChar.$hisChar."+") + 3;
+	  return strpos($line,$hisChar.$hisChar.$hisChar."+") + 3;
         }
     }else{
         if (strpos($line,"+".$hisChar.$hisChar."+")  !== false ){
             return strpos($line,"+".$hisChar.$hisChar."+");
         }
+        if(strpos($line,"+".$hisChar."+".$hisChar."+")  !== false ){
+	    return strpos($line,"+".$hisChar."+".$hisChar."+") + 2;
+        }
+
     }
     return false;
     
@@ -207,13 +211,12 @@ switch($params['action']){
                     }
                     if (can_loose($lnStr,$opponent) !== false){
                       $colForNoLose = can_loose($lnStr,$opponent);
-                    }
+		    }
                     if (can_loose($lnStr,$opponent,1) !== false){
                       $colForNoLose1 = can_loose($lnStr,$opponent,1);
                     }
                     
 		}
-		
 		
 		//tester seulement les diagonales >= 4 cases
 		
@@ -288,7 +291,6 @@ switch($params['action']){
                     }
                    
                 }
-
                 //si j'arrive là, je ne gagne pas à ce tour
                 if(isset($colForNoLose)){
                     echo '{"play":'.$colForNoLose.'}';
