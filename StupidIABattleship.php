@@ -94,9 +94,6 @@ switch($message['action']){
             }
             $$key=$message['board'][$key];
         }
-        if(!preg_match('/^[0-9]+-(1|2)$/',$match_id)){
-	  echo "parametre incorrect"; die;
-        }
         
         if(!is_it_possible_to_place_ships_on_grid($width,$height,$ship1,$ship2,$ship3,$ship4,$ship5,$ship6)){
 	  echo "I don't want play this game";
