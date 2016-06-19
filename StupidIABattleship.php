@@ -199,7 +199,7 @@ switch($message['action']){
                 case 'left':
 		    $shipsCoords[]=$x.",".$y."-".($x - $shipWidth + 1).",".$y;
 		    $map= place_ship_on_map($x,$y,$x - $shipWidth + 1 ,$y,$map);
-                    break;$message['board']
+                    break;
                 case 'right':
 		    $shipsCoords[]=$x.",".$y."-".($x + $shipWidth - 1 ).",".$y;
 		    $map= place_ship_on_map($x,$y,$x + $shipWidth -1 ,$y,$map);
