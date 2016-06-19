@@ -1,4 +1,9 @@
 <?php
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST'); 
+header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
+
+
 function is_it_possible_to_place_ships_on_grid($gridWidth,$gridHeight,$nbShipsSize1,$nbShipsSize2,$nbShipsSize3,$nbShipsSize4,$nbShipsSize5,$nbShipsSize6){
   //return false or true
   //not a perfect solution
@@ -67,9 +72,11 @@ function place_ship_on_map($x1,$y1,$x2,$y2,$map){
   }
 }
 
-switch($_POST['act']){
+$message=json_decode(file_get_contents('php://input'), TRUE);
+
+switch($message['action']){
     case "init":
-      file_put_contents(__DIR__."/log.txt",print_r($_POST,true));
+      //file_put_contents(__DIR__."/log.txt",print_r($_POST,true));
 	$wantedVars=array(
             'match_id'  => false, //false-> string ; true -> integer
             'opponent'  => false,
