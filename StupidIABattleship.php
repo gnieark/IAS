@@ -78,7 +78,6 @@ switch($message['action']){
     case "init":
       //file_put_contents(__DIR__."/log.txt",print_r($_POST,true));
 	$wantedVars=array(
-            'match_id'  => false, //false-> string ; true -> integer
             'opponent'  => false,
             'width'     => true,
             'height'    => true,
@@ -90,10 +89,10 @@ switch($message['action']){
             'ship6'     => true
 	);
         foreach($wantedVars as $key => $shouldBeInteger){
-            if(($shouldBeInteger) && (!is_numeric($_POST[$key]))){
+            if(($shouldBeInteger) && (!is_numeric($message['board'][$key]))){
                 echo "var is not numeric"; die;
             }
-            $$key=$_POST[$key];
+            $$key=$message['board'][$key];
         }
         if(!preg_match('/^[0-9]+-(1|2)$/',$match_id)){
 	  echo "parametre incorrect"; die;
@@ -200,7 +199,7 @@ switch($message['action']){
                 case 'left':
 		    $shipsCoords[]=$x.",".$y."-".($x - $shipWidth + 1).",".$y;
 		    $map= place_ship_on_map($x,$y,$x - $shipWidth + 1 ,$y,$map);
-                    break;
+                    break;$message['board']
                 case 'right':
 		    $shipsCoords[]=$x.",".$y."-".($x + $shipWidth - 1 ).",".$y;
 		    $map= place_ship_on_map($x,$y,$x + $shipWidth -1 ,$y,$map);
@@ -210,12 +209,11 @@ switch($message['action']){
 	  }
         }
 
-        echo json_encode($shipsCoords);
-        file_put_contents(__DIR__."/log.txt",json_encode($shipsCoords),FILE_APPEND);
+        
+        echo json_encode(array("name" => "gnieark", "boats" =>  $shipsCoords);
         break;
     case "fight":
       //for debog arena
-      file_put_contents(__DIR__."/log.txt",print_r($_POST,true),FILE_APPEND);
 
 	echo rand(0,$_POST['width'] -1).",".rand(0,$_POST['height'] -1);
       
