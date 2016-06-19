@@ -212,7 +212,7 @@ switch($message['action']){
     case "fight":
       //for debog arena
 
-	echo rand(0,$_POST['width'] -1).",".rand(0,$_POST['height'] -1);
+	echo '{"play":"'.rand(0,$_POST['width'] -1).",".rand(0,$_POST['height'] -1).'"}';
       
       
       die;
