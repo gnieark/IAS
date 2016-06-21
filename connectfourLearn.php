@@ -1,29 +1,14 @@
 <?php
 /*
-
-Bot for connectfour https://botsarena.tinad.fr/connectFour
-by Gnieark https://blog-du-grouik.tinad.fr/ june 2016 
-GNU GPL License
-
-    +--+--+--+--+--+--+--+
-5   |  |  |  |  |  |  |  |
-    +--+--+--+--+--+--+--+
-4   |  |  |  |  |  |  |  |
-    +--+--+--+--+--+--+--+
-3   |  |  |  |  |  |  |  |
-    +--+--+--+--+--+--+--+
-2   |  |  |  |  |  |  |  |
-    +--+--+--+--+--+--+--+
-1   |  |  |  |  |  |  |  |
-    +--+--+--+--+--+--+--+
-0   |  |  |  |  |  |  |  |
-    +--+--+--+--+--+--+--+
-      0  1  2  3  4  5  6
+* Bot for connectfour https://botsarena.tinad.fr/connectFour
+* by Gnieark https://blog-du-grouik.tinad.fr/ june 2016 
+* GNU GPL License
 */
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST'); 
 header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
+header('Content-Type: application/json');
 
 
 //connexion mysql
@@ -45,7 +30,7 @@ function hash_map($map,$me,$opponent){
 	  case $me:
 	    $hashMap.="1";
 	    break;
-	  case $opponnent:
+	  case $opponent:
 	    $hashMap.="2";
 	    break;
 	   default: 
@@ -60,13 +45,22 @@ function hash_map($map,$me,$opponent){
 }
 
 
-function play($map,$colToPlay,$me,$opponnent,$gameid){
-  //save the lap on the database and then send the play response
- 
-  //transform map as string
-
+function play($map,$colToPlay,$me,$opponent,$gameid,$player_index){
+  global $lnMySQL;
   
-
+  //save the lap on the database and then send the play response
+  mysqli_query(
+    "INSERT INTO battleship_current (game_id,player_index,map,play_at) VALUES
+    ('".mysqli_real_escape_string($lnMySQL,$gameid)."',
+    '".mysqli_real_escape_string($lnMySQL,$player_index)."',
+    '".hash_map($map,$me,$opponent)."',
+    '".$colToPlay."')
+    ON DUPLICATE KEY UPDATE
+     map='".hash_map($map,$me,$opponent)."',
+     play_at='".$colToPlay."';");
+     
+    echo '{"play":'.$colToPlay.'}';
+    die;
 }
 
 function can_win($line,$myChar,$depth=0){
@@ -383,8 +377,7 @@ switch($params['action']){
                     }
                 }
 
-                if(count($choice['colForNoLose']) > 0){
-                
+                if(count($choice['colForNoLose']) > 0){            
                     //intersection entre $choice['colForNoLose'] et $colAvailable
                     $intersection = array_intersect($choice['colForNoLose'],$colAvailable);
                     if(count($intersection) > 0){
@@ -399,9 +392,7 @@ switch($params['action']){
                     }
                     
                 }
-                
-                
-                
+
                 $colForNoLose1 = array_unique($choice['colForNoLose1']);
                 $canWinDepth1 = array_unique($choice['canWinDepth1']);
                 
