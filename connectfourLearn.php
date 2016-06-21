@@ -25,6 +25,50 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST'); 
 header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
 
+
+//connexion mysql
+require_once("config.php");
+
+if (!$lnMySQL=mysqli_connect($config['mysql_host'], $config['mysql_user'], $config['87%!IuQs'])) {
+    error(500,'database connexion failed');
+    die;
+}
+
+mysqli_select_db($lnMySQL,$config['mysql_database']);
+mysqli_set_charset($lnMySQL, 'utf8');  
+
+function hash_map($map,$me,$opponent){
+  $hashMap = "";
+  foreach($map as $line){
+    foreach ($line as $cell){
+	switch($cell){
+	  case $me:
+	    $hashMap.="1";
+	    break;
+	  case $opponnent:
+	    $hashMap.="2";
+	    break;
+	   default: 
+	    $hashMap.="0";
+	    break;
+	}
+    }
+  }
+  
+  return base_convert($hashMap, 3, 10);
+  
+}
+
+
+function play($map,$colToPlay,$me,$opponnent,$gameid){
+  //save the lap on the database and then send the play response
+ 
+  //transform map as string
+
+  
+
+}
+
 function can_win($line,$myChar,$depth=0){
     //retourne la position du caractere a remplacer dans la ligne pour gagner
     $arr=array();
@@ -262,9 +306,7 @@ switch($params['action']){
 		}
 
 		//transformer la grille en lignes horizontales, verticales et diagonales
-		
-            
-		
+
 		//verticales
 		for($x = 0; $x <7; $x ++){
                     $colStr="";
@@ -319,8 +361,7 @@ switch($params['action']){
                     }
                      $choice = analize($diagStr,$params['you'],$opponent,false,0);
                 }
-//print_r($choice);                
-                
+                           
                 //si j'arrive là, je ne gagne pas à ce tour
                 
                 //liste des cases possible moins celles à éviter
@@ -341,10 +382,7 @@ switch($params['action']){
                             }
                     }
                 }
-		
-                
-                
-                
+
                 if(count($choice['colForNoLose']) > 0){
                 
                     //intersection entre $choice['colForNoLose'] et $colAvailable
@@ -398,6 +436,3 @@ switch($params['action']){
 	default:
 		break;
 }
-
-
-
