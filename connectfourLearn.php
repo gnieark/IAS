@@ -43,7 +43,17 @@ function hash_map($map,$me,$opponent){
   return base_convert($hashMap, 3, 10);
   
 }
+function remenber_previous_lap_is_a_bullshit(){
+  global $params, $lnMySQL;
+    mysqli_query($lnMySQL,
+      "INSERT INTO battleshipLearn(map,	dont_play_col)
+	  SELECT battleship_current.map, battleship_current.play_at 
+	  FROM battleship_current
+	  WHERE battleship_current.game_id='".mysqli_real_escape_string($lnMySQL,$params['game-id'])."'
+	  AND battleship_current.player_index='".mysqli_real_escape_string($lnMySQL,$params['player-index'])."';"
+    );
 
+}
 
 function play($map,$colToPlay,$me,$opponent,$gameid,$player_index){
   global $lnMySQL;
@@ -372,6 +382,7 @@ switch($params['action']){
 		}
                 if(count($colAvailable) == 0){
                     //on risque de perdre au prochain tour
+                    remenber_previous_lap_is_a_bullshit();
                     for($i=0;$i<7;$i++){		
                             if(($params['board'][5][$i] == "+") OR ($params['board'][5][$i] == "-")){
                                     $colAvailable[]=$i;
@@ -388,6 +399,7 @@ switch($params['action']){
                         die;
                     }else{
                         //on pourra perdre au prochain tour, tant pis
+                        remenber_previous_lap_is_a_bullshit();
                         shuffle($choice['colForNoLose']);
                         play($params['board'],$choice['colForNoLose'][0],$params['you'],$opponent,$params['game-id'],$params['player-index']);
                         die;                      
