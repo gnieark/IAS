@@ -14,7 +14,7 @@ header('Content-Type: application/json');
 //connexion mysql
 require_once("config.php");
 
-if (!$lnMySQL=mysqli_connect($config['mysql_host'], $config['mysql_user'], $config['87%!IuQs'])) {
+if (!$lnMySQL=mysqli_connect($config['mysql_host'], $config['mysql_user'], $config['pass'])) {
     error(500,'database connexion failed');
     die;
 }
