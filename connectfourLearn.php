@@ -49,7 +49,7 @@ function play($map,$colToPlay,$me,$opponent,$gameid,$player_index){
   global $lnMySQL;
   
   //save the lap on the database and then send the play response
-  mysqli_query(
+  mysqli_query($lnMySQL,
     "INSERT INTO battleship_current (game_id,player_index,map,play_at) VALUES
     ('".mysqli_real_escape_string($lnMySQL,$gameid)."',
     '".mysqli_real_escape_string($lnMySQL,$player_index)."',
