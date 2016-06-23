@@ -94,6 +94,9 @@ switch($message['action']){
             }
             $$key=$message['board'][$key];
         }
+        if(!preg_match('/^[0-9]+-(1|2)$/',$match_id)){
+	  echo "parametre incorrect"; die;
+        }
         
         if(!is_it_possible_to_place_ships_on_grid($width,$height,$ship1,$ship2,$ship3,$ship4,$ship5,$ship6)){
 	  echo "I don't want play this game";
@@ -207,12 +210,12 @@ switch($message['action']){
         }
 
         
-        echo json_encode(array("name" => "gnieark", "boats" =>  $shipsCoords));
+        echo json_encode(array("name" => "gnieark", "boats" =>  $shipsCoords);
         break;
-    case "play-turn":
+    case "fight":
       //for debog arena
 
-	echo '{"play":"'.rand(0,$message['board']['width'] -1).",".rand(0,$message['board']['height'] -1).'"}';
+	echo rand(0,$_POST['width'] -1).",".rand(0,$_POST['height'] -1);
       
       
       die;

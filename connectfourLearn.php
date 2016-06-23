@@ -147,11 +147,13 @@ function analize($line,$me,$opponent,$isVertical,$decalageX){
     static $colForNoLose1 = array();
     static $canWinDepth1 = array();
     
+    global $params;
+    
     if(count(can_win($line,$me,0)) > 0){
         if($isVertical){
-            echo '{"play":'.$decalageX.'}';
+	    play($params['board'],$decalageX,$me,$opponent,$params['game-id'],$params['player-index']);
         }else{
-            echo '{"play":'.(can_win($line,$me,0)[0] + $decalageX).'}';
+	    play($params['board'],(can_win($line,$me,0)[0] + $decalageX),$me,$opponent,$params['game-id'],$params['player-index']);
         }
         die;
         
@@ -382,12 +384,12 @@ switch($params['action']){
                     $intersection = array_intersect($choice['colForNoLose'],$colAvailable);
                     if(count($intersection) > 0){
                         shuffle($intersection);
-                        echo '{"play":'.$intersection[0].'}';
+                        play($params['board'],$intersection[0],$params['you'],$opponent,$params['game-id'],$params['player-index']);
                         die;
                     }else{
                         //on pourra perdre au prochain tour, tant pis
                         shuffle($choice['colForNoLose']);
-                        echo '{"play":'.$choice['colForNoLose'][0].'}';
+                        play($params['board'],$choice['colForNoLose'][0],$params['you'],$opponent,$params['game-id'],$params['player-index']);
                         die;                      
                     }
                     
@@ -399,28 +401,28 @@ switch($params['action']){
                 $intersection = array_intersect($colForNoLose1,$colAvailable,$canWinDepth1);
                 if(count($intersection) > 0){
                     shuffle($intersection);
-                    echo '{"play":'.$intersection[0].'}';
+                    play($params['board'],$intersection[0],$params['you'],$opponent,$params['game-id'],$params['player-index']);
                     die;
                 }
                 
                 $intersection = array_intersect($colForNoLose1,$colAvailable);
                 if(count($intersection) > 0){
                     shuffle($intersection);
-                    echo '{"play":'.$intersection[0].'}';
+                    play($params['board'],$intersection[0],$params['you'],$opponent,$params['game-id'],$params['player-index']);
                     die;
                 }
                 
                 $intersection = array_intersect($colForNoLose1,$canWinDepth1);
                 if(count($intersection) > 0){
                     shuffle($intersection);
-                    echo '{"play":'.$intersection[0].'}';
+                    play($params['board'],$intersection[0],$params['you'],$opponent,$params['game-id'],$params['player-index']);
                     die;
                 }
             
                 //still there? random
 				
 		shuffle($colAvailable);
-		echo '{"play":'.$colAvailable[0].'}';
+		play($params['board'],$colAvailable[0],$params['you'],$opponent,$params['game-id'],$params['player-index']);
 
 		
 		break;
