@@ -40,8 +40,7 @@ function hash_map($map,$me,$opponent){
     }
   }
   
-  return base_convert($hashMap, 3, 10);
-  
+ return base_convert($hashMap, 3, 16);
 }
 function remenber_previous_lap_is_a_bullshit(){
   global $params, $lnMySQL;
@@ -69,7 +68,7 @@ function play($map,$colToPlay,$me,$opponent,$gameid,$player_index){
      map='".hash_map($map,$me,$opponent)."',
      play_at='".$colToPlay."';");
      
-    echo '{"play":'.$colToPlay.'}';
+    echo '{"play":'.$colToPlay.',"spy":"'.hash_map($map,$me,$opponent).'"}';
     die;
 }
 
