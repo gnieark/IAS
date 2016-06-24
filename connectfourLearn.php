@@ -21,6 +21,8 @@ if (!$lnMySQL=mysqli_connect($config['mysql_host'], $config['mysql_user'], $conf
 
 mysqli_select_db($lnMySQL,$config['mysql_database']);
 mysqli_set_charset($lnMySQL, 'utf8');  
+//purge old games
+mysqli_query($lnMySQL,"DELETE FROM battleship_current WHERE time < (NOW() - INTERVAL 10 MINUTE)");
 
 function hash_map($map,$me,$opponent){
   $hashMap = "";
@@ -68,7 +70,7 @@ function play($map,$colToPlay,$me,$opponent,$gameid,$player_index){
      map='".hash_map($map,$me,$opponent)."',
      play_at='".$colToPlay."';");
      
-    echo '{"play":'.$colToPlay.',"spy":"'.hash_map($map,$me,$opponent).'"}';
+    echo '{"play":"'.$colToPlay.'"}';
     die;
 }
 
@@ -370,11 +372,20 @@ switch($params['action']){
                 //si j'arrive là, je ne gagne pas à ce tour
                 
                 //liste des cases possible moins celles à éviter
-                
+               
+		//Est-ce que cette combinaison est sauvegardée comme perdante?
+
+		$rs = mysqli_query($lnMySQL,"SELECT dont_play_col FROM battleshipLearn WHERE map='".hash_map($params['board'],$params['you'],$opponent)."'");
+		$learnedCells = array();
+		while($r = mysqli_fetch_row($rs)){
+			$learnedCells[] = $r[0];
+		}
+ 
                 $colAvailable=array();
 		for($i=0;$i<7;$i++){
   			if((($params['board'][5][$i] == "+") OR ($params['board'][5][$i] == "-"))
-                        AND (!should_opponent_win_if_i_play_at($params['board'],$params['you'],$opponent,$i)))
+                        AND (!should_opponent_win_if_i_play_at($params['board'],$params['you'],$opponent,$i))
+			AND (!in_array($i,$learnedCells)))
   			{
     				$colAvailable[]=$i;
   			}
