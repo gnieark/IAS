@@ -383,7 +383,7 @@ switch($params['action']){
 			$learnedCells[] = $r[0];
 		}
 		
-		$trace.="|learnedCells:".implode(","$learnedCells);
+		$trace.="|learnedCells:".implode(",",$learnedCells);
 		
                 $colAvailable=array();
 		for($i=0;$i<7;$i++){
