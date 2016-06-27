@@ -72,11 +72,7 @@ function play($map,$colToPlay,$me,$opponent,$gameid,$player_index){
      map='".hash_map($map,$me,$opponent)."',
      play_at='".$colToPlay."';");
      
-<<<<<<< HEAD
-    echo '{"play":'.$colToPlay.'}';
-=======
     echo '{"play":'.$colToPlay.',"trace":"'.$trace.'"}';
->>>>>>> 6274fd69c6243df749a1975580ece25a3f80582f
     die;
 }
 
