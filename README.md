@@ -1,2 +1,2 @@
-# IAS fot Bots arena or Bollosseum
+# IAS for BotsArena or Bollosseum
 They ar hosted at https://ias.tinad.fr/
