@@ -383,8 +383,6 @@ switch($params['action']){
 			$learnedCells[] = $r[0];
 		}
 		
-		$trace.="|learnedCells:".implode(",",$learnedCells);
-		
                 $colAvailable=array();
 		for($i=0;$i<7;$i++){
   			if((($params['board'][5][$i] == "+") OR ($params['board'][5][$i] == "-"))
@@ -407,6 +405,9 @@ switch($params['action']){
 		  //opponent has to places to win
 		  remenber_previous_lap_is_a_bullshit();
 		}
+		
+		$trace.="|learnedCells:".implode(",",$learnedCells)."|colAva:".implode(",",$colAvailable)."|colforNoLose:".implode(",",$choice['colForNoLose'])."|col for no loose depth1:".implode(",",$choice['colForNoLose1']);
+		
                 if(count($choice['colForNoLose']) > 0){            
                     //intersection entre $choice['colForNoLose'] et $colAvailable
                     $intersection = array_intersect($choice['colForNoLose'],$colAvailable);
