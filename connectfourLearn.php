@@ -47,7 +47,8 @@ function hash_map($map,$me,$opponent){
  return base_convert($hashMap, 3, 16);
 }
 function remenber_previous_lap_is_a_bullshit(){
-  global $params, $lnMySQL;
+  global $params, $lnMySQL,$trace;
+   $trace.="|I Learn it";
     mysqli_query($lnMySQL,
       "INSERT INTO battleshipLearn(map,	dont_play_col)
 	  SELECT battleship_current.map, battleship_current.play_at 
