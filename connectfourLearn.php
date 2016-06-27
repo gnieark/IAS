@@ -205,72 +205,72 @@ function analize($line,$me,$opponent,$isVertical,$decalageX){
 
 
 function should_opponent_win_if_i_play_at($map,$me,$opponent,$colToPlay){
-  //j'ouvre l'a possibilité à l'adversaire de jouer au dessus de mon pion
-  // est-ce une connerie?
-  
-  if(($map[4][$colToPlay] == $me) OR ($map[4][$colToPlay] == $opponent)){
-    //top of the grid
-    return false;
-  }
-  
-  for($y = 0; (($map[$y][$colToPlay] <> "+") && ($map[$y][$colToPlay] <> "-")); $y++){
-  }
-  
-  $map[$y][$colToPlay] = $me;
-  $map[$y +1][$colToPlay] = "$opponent";
-  $y++;
-  if(isset($map[$y +1][$colToPlay])){
-    $map[$y +1][$colToPlay] = "+";
-  }
-  //tester les lignes qui passent pas $y+1,$colToPlay
-  
-  $loseStr = $opponent.$opponent.$opponent.$opponent;
-  //horizontale
-  $line="";
-  for($x=0; $x < 7; $x++){
-    $line.=$map[$y][$x];
-  }
-  if(strpos($line,$loseStr) !== false){
-    return true;
-  }
-  
-  //diagonal /
-  $line="";
-  if($colToPlay > $y){
-    $kx=$colToPlay - $y;
-    $ky = 0;
-  }else{
-    $kx = 0;
-    $ky = $y - $colToPlay;
-  }
-  while(isset($map[$ky][$kx])){
-    $line.=$map[$ky][$kx];
-    $kx++;
-    $ky++;
-  }
-  if(strpos($line,$loseStr) !== false){
-    return true;
-  }
-  
-  //diagional \
-  $line = "";
-  $kx = $colToPlay;
-  $ky = $y;
-  
-  while(isset($map[$ky -1][$kx +1])){
-    $kx++;
-    $ky--;
-  }
+    //j'ouvre l'a possibilité à l'adversaire de jouer au dessus de mon pion
+    // est-ce une connerie?
+    
+    if(($map[4][$colToPlay] == $me) OR ($map[4][$colToPlay] == $opponent)){
+      //top of the grid
+      return false;
+    }
+    
+    for($y = 0; (($map[$y][$colToPlay] <> "+") && ($map[$y][$colToPlay] <> "-")); $y++){
+    }
+    
+    $map[$y][$colToPlay] = $me;
+    $map[$y +1][$colToPlay] = "$opponent";
+    $y++;
+    if(isset($map[$y +1][$colToPlay])){
+      $map[$y +1][$colToPlay] = "+";
+    }
+    //tester les lignes qui passent pas $y+1,$colToPlay
+    
+    $loseStr = $opponent.$opponent.$opponent.$opponent;
+    //horizontale
+    $line="";
+    for($x=0; $x < 7; $x++){
+      $line.=$map[$y][$x];
+    }
+    if(strpos($line,$loseStr) !== false){
+      return true;
+    }
+    
+    //diagonal /
+    $line="";
+    if($colToPlay > $y){
+      $kx=$colToPlay - $y;
+      $ky = 0;
+    }else{
+      $kx = 0;
+      $ky = $y - $colToPlay;
+    }
+    while(isset($map[$ky][$kx])){
+      $line.=$map[$ky][$kx];
+      $kx++;
+      $ky++;
+    }
+    if(strpos($line,$loseStr) !== false){
+      return true;
+    }
+    
+    //diagional \
+    $line = "";
+    $kx = $colToPlay;
+    $ky = $y;
+    
+    while(isset($map[$ky -1][$kx +1])){
+      $kx++;
+      $ky--;
+    }
 
-  while(isset($map[$ky][$kx])){
-    $line.=$map[$ky][$kx];
-    $kx--;
-    $ky++;
-  }
-  if(strpos($line,$loseStr) !== false){
-    return true;
-  }
-  return false;
+    while(isset($map[$ky][$kx])){
+      $line.=$map[$ky][$kx];
+      $kx--;
+      $ky++;
+    }
+    if(strpos($line,$loseStr) !== false){
+      return true;
+    }
+    return false;
 }
 
 
@@ -399,7 +399,10 @@ switch($params['action']){
                             }
                     }
                 }
-
+		if(count(array_unique($choice['colForNoLose'])) > 1){
+		  //opponent has to places to win
+		  remenber_previous_lap_is_a_bullshit();
+		}
                 if(count($choice['colForNoLose']) > 0){            
                     //intersection entre $choice['colForNoLose'] et $colAvailable
                     $intersection = array_intersect($choice['colForNoLose'],$colAvailable);
