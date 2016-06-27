@@ -24,6 +24,8 @@ mysqli_set_charset($lnMySQL, 'utf8');
 //purge old games
 mysqli_query($lnMySQL,"DELETE FROM battleship_current WHERE time < (NOW() - INTERVAL 10 MINUTE)");
 
+$trace = "";
+
 function hash_map($map,$me,$opponent){
   $hashMap = "";
   foreach($map as $line){
@@ -57,7 +59,7 @@ function remenber_previous_lap_is_a_bullshit(){
 }
 
 function play($map,$colToPlay,$me,$opponent,$gameid,$player_index){
-  global $lnMySQL;
+  global $lnMySQL,$trace;
   
   //save the lap on the database and then send the play response
   mysqli_query($lnMySQL,
@@ -70,7 +72,7 @@ function play($map,$colToPlay,$me,$opponent,$gameid,$player_index){
      map='".hash_map($map,$me,$opponent)."',
      play_at='".$colToPlay."';");
      
-    echo '{"play":"'.$colToPlay.'"}';
+    echo '{"play":'.$colToPlay.',"trace":"'.$trace.'"}';
     die;
 }
 
@@ -380,7 +382,9 @@ switch($params['action']){
 		while($r = mysqli_fetch_row($rs)){
 			$learnedCells[] = $r[0];
 		}
- 
+		
+		$trace.="|learnedCells:".implode(","$learnedCells);
+		
                 $colAvailable=array();
 		for($i=0;$i<7;$i++){
   			if((($params['board'][5][$i] == "+") OR ($params['board'][5][$i] == "-"))
