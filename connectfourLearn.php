@@ -394,6 +394,7 @@ switch($params['action']){
   			}
 		}
                 if(count($colAvailable) == 0){
+		    $trace.="|no colsAvailable";
                     //on risque de perdre au prochain tour
                     remenber_previous_lap_is_a_bullshit();
                     for($i=0;$i<7;$i++){		
