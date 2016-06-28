@@ -210,7 +210,7 @@ switch($message['action']){
         
         echo json_encode(array("name" => "gnieark", "boats" =>  $shipsCoords));
         break;
-    case "fight":
+    case "play-turn":
       //for debog arena
 
 	echo rand(0,$_POST['width'] -1).",".rand(0,$_POST['height'] -1);
