@@ -213,7 +213,7 @@ switch($message['action']){
     case "play-turn":
       //for debog arena
 
-	echo rand(0,$message['width'] -1).",".rand(0,$message['height'] -1);
+	echo rand(0,$message['board']['width'] -1).",".rand(0,$message['board']['height'] -1);
       
       
       die;
