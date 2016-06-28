@@ -76,7 +76,7 @@ $message=json_decode(file_get_contents('php://input'), TRUE);
 
 switch($message['action']){
     case "init":
-      //file_put_contents(__DIR__."/log.txt",print_r($_POST,true));
+
 	$wantedVars=array(
             'opponent'  => false,
             'width'     => true,
@@ -213,7 +213,7 @@ switch($message['action']){
     case "play-turn":
       //for debog arena
 
-	echo rand(0,$_POST['width'] -1).",".rand(0,$_POST['height'] -1);
+	echo rand(0,$message['width'] -1).",".rand(0,$message['height'] -1);
       
       
       die;
