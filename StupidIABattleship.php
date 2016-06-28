@@ -210,7 +210,7 @@ switch($message['action']){
         }
 
         
-        echo json_encode(array("name" => "gnieark", "boats" =>  $shipsCoords);
+        echo json_encode(array("name" => "gnieark", "boats" =>  $shipsCoords));
         break;
     case "fight":
       //for debog arena
