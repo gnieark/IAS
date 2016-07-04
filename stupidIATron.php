@@ -46,7 +46,7 @@ switch($params['action']){
 		}
 		
 		if(count($availablesDirs) == 0){
-		  echo '{"play":"x+","comment":"I Loose"}';
+		  echo '{"play":"x+","comment":"I Loose'.$myCoords.'"}';
 		}else{
 		  shuffle($availablesDirs);
 		  echo '{"play":"'.$availablesDirs[0].'"}';
