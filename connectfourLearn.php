@@ -73,7 +73,9 @@ function play($map,$colToPlay,$me,$opponent,$gameid,$player_index){
      map='".hash_map($map,$me,$opponent)."',
      play_at='".$colToPlay."';");
      
-    echo '{"play":'.$colToPlay.',"comment":"'.$trace.'"}';
+    //echo '{"play":'.$colToPlay.',"comment":"'.$trace.'"}';
+    echo '{"play":'.$colToPlay.',"comment":13}';
+
     die;
 }
 

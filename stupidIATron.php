@@ -27,7 +27,9 @@ switch($params['action']){
 		}
 		//get my head coords
 		$myCoords = end($params['board'][$params['player-index']]);
-		list($x,$y) = explode(",",$myCoords);
+		
+		$x = $myCoords[0];
+		$y = $myCoords[1];
 		
 		$availablesDirs = array();
 		if (in_array(($x + 1).",".$y, $busyCells)){
@@ -47,7 +49,7 @@ switch($params['action']){
 		  echo '{"play":"x+","comment":"I Loose"}';
 		}else{
 		  shuffle($availablesDirs);
-		  echo '{"play":"'.$availablesDirs[0].'","comment":"I Loose"}';
+		  echo '{"play":"'.$availablesDirs[0].'"}';
 		}
 		
 		break;
