@@ -30,16 +30,16 @@ switch($params['action']){
 		list($x,$y) = explode(",",$myCoords);
 		
 		$availablesDirs = array();
-		if in_array(($x + 1).",".$y, $busyCells){
+		if (in_array(($x + 1).",".$y, $busyCells)){
 		  $availablesDirs[] = "x+";
 		}
-		if in_array(($x -1 ).",".$y, $busyCells){
+		if (in_array(($x -1 ).",".$y, $busyCells)){
 		  $availablesDirs[] = "x-";
 		}
-		if in_array($x.",".($y + 1), $busyCells){
+		if (in_array($x.",".($y + 1), $busyCells)){
 		  $availablesDirs[] = "y+";
 		}
-		if in_array($x.",".($y - 1), $busyCells){
+		if (in_array($x.",".($y - 1), $busyCells)){
 		  $availablesDirs[] = "y-";
 		}
 		
