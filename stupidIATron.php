@@ -8,6 +8,9 @@ header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 * stupid IA for tron
 */
 $in=file_get_contents('php://input');
+
+
+
 $params=json_decode($in, TRUE);
 switch($params['action']){
 	case "init":
@@ -16,20 +19,14 @@ switch($params['action']){
 	case "play-turn":
 		
 		//Input JSON exemple:
-		/*{
-		"game-id":"1647",
+		/*
+		{"game-id":"1784",
 		"action":"play-turn",
 		"game":"tron",
 		"board":[
-		  [
-		    [425,763],[424,763],[423,763],[422,763],[421,763],[420,763],[419,763]
-		   ],
-		   [
-		    [858,501],[857,501],[856,501],[855,501],[854,501],[853,501],[852,501]
-		   ]
-		 ],
-		"player-index":0,
-		"players":2}
+			  [[490,937],[489,937],[489,938]],
+			  [[349,806],[350,806],[350,805]]
+		      ],"player-index":0,"players":2}
 		*/
 		
 		//put all non empty coords on array
@@ -41,28 +38,30 @@ switch($params['action']){
 		  }
 		}
 		
+		
 		//get my head coords
-		$myCoords = end($params['board'][$params['player-index']]);
+		$myCoords = $params['board'][$params['player-index']][0];
 		
 		$x = $myCoords[0];
 		$y = $myCoords[1];
 		
 		$availablesDirs = array();
 		if (!in_array(($x + 1).",".$y, $busyCells)){
-		  $availablesDirs[] = "x-";
-		}
-		if (!in_array(($x -1 ).",".$y, $busyCells)){
 		  $availablesDirs[] = "x+";
 		}
+		if (!in_array(($x -1 ).",".$y, $busyCells)){
+		  $availablesDirs[] = "x-";
+		}
 		if (!in_array($x.",".($y + 1), $busyCells)){
-		  $availablesDirs[] = "y-";
+		  $availablesDirs[] = "y+";
 		}
 		if (!in_array($x.",".($y - 1), $busyCells)){
-		  $availablesDirs[] = "y+";
+		  $availablesDirs[] = "y-";
 		}
 		
 		if(count($availablesDirs) == 0){
 		  echo '{"play":"x+","comment":"I Loose"}';
+		  error_log("i ll loose");
 		}else{
 		  shuffle($availablesDirs);
 		  echo '{"play":"'.$availablesDirs[0].'"}';
