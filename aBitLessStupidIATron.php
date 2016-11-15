@@ -1,5 +1,13 @@
 <?php
 
+/*
+* stupid IA for tron
+* but less stupid in order to test the arena code
+*
+* Copy left Gnieark https://blog-du-grouik.tinad.fr 2016
+* GNU GPL V3 license
+*/
+
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST'); 
 header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
@@ -9,28 +17,34 @@ header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 include ("incTron/Coords.php");
 include ("incTron/Direction.php");
 
-/*
-* stupid IA for tron
-*/
+
 $in=file_get_contents('php://input');
 
 $params=json_decode($in, TRUE);
-
+function in_array_objet($searched,$array){
+  /*
+  *Because( in_array php function doesn't works if array contains objects)
+  */
+  
+  foreach($array as $obj){
+    if ($searched == $obj) return true;
+  }
+  return false;
+}
 
 function get_available_dirs($busyCells,$myCoords){
 
-  $directions = array(
-    new Direction('x+'),
-    new Direction('x-'),
-    new Direction('y+'),
-    new Direction('y-')
+  $directions =  array(
+    Direction::make("x+"),
+    Direction::make("x-"),
+    Direction::make("y+"),
+    Direction::make("y-")
   );
-  
+
   $availablesDirs = array();
-  
-  foreach ($directions as $direction){
-    if(in_array($myCoords->addDirection($direction),$busyCells)){
-      $availablesDirs[] = $direction;
+  foreach ($directions as $dirObj){
+    if(!in_array_objet($myCoords->addDirection($dirObj),$busyCells, TRUE)){
+      $availablesDirs[] = $dirObj;
     }
   }
   
@@ -73,11 +87,13 @@ switch($params['action']){
 		//get my head coords
 		$myCoords =  new Coords($params['board'][$params['player-index']][0][0],$params['board'][$params['player-index']][0][1]);
 		$availablesDirs = get_available_dirs($busyCells,$myCoords);
+		
+		
 		//score them
 		$majoredAvailableDirs = array();
 		foreach($availablesDirs as $dir){
 		  $score = scoreDirection($busyCells,$myCoords,$dir);
-		  for($i = 0; $i < $score * 5; $i++){
+		  for($i = 0; $i < $score * 10; $i++){
 		    $majoredAvailableDirs[] = $dir;
 		  }
 		}
@@ -89,7 +105,8 @@ switch($params['action']){
 		}else{
 		  shuffle($majoredAvailableDirs);
 		  echo '{"play":"'.$majoredAvailableDirs[0].'"}';
-		  error_log(json_encode($majoredAvailableDirs));
+		  
+		  //error_log(json_encode($majoredAvailableDirs));
 		}
 		
 		break;

@@ -70,7 +70,7 @@ class Direction
 	$dir->setValue(Direction::$bottom);
 	break;
       default:
-	//error_log("expected 'x+', 'x-', 'y+' or 'y-'". (string)$str."received.");
+	error_log("expected 'x+', 'x-', 'y+' or 'y-'". (string)$str."received.");
 	return false;
 	//throw new InvalidDirectionException("expected 'x+', 'x-', 'y+' or 'y-'". (string)$str."received.");
 	break;

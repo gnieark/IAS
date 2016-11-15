@@ -61,7 +61,7 @@ switch($params['action']){
 		
 		if(count($availablesDirs) == 0){
 		  echo '{"play":"x+","comment":"I Loose"}';
-		  error_log("i ll loose");
+		  //error_log("i ll loose");
 		}else{
 		  shuffle($availablesDirs);
 		  echo '{"play":"'.$availablesDirs[0].'"}';
