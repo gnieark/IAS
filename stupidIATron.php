@@ -1,17 +1,63 @@
 <?php
 
+/*
+* stupid IA for tron
+* but less stupid in order to test the arena code
+*
+* Copy left Gnieark https://blog-du-grouik.tinad.fr 2016
+* GNU GPL V3 license
+*/
+
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST'); 
 header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept');
 
-/*
-* stupid IA for tron
-*/
+
+//load classes
+include ("incTron/Coords.php");
+include ("incTron/Direction.php");
+
+
 $in=file_get_contents('php://input');
 
-
-
 $params=json_decode($in, TRUE);
+function in_array_objet($searched,$array){
+  /*
+  *Because( in_array php function doesn't works if array contains objects)
+  */
+  
+  foreach($array as $obj){
+    if ($searched == $obj) return true;
+  }
+  return false;
+}
+
+function get_available_dirs($busyCells,$myCoords){
+
+  $directions =  array(
+    Direction::make("x+"),
+    Direction::make("x-"),
+    Direction::make("y+"),
+    Direction::make("y-")
+  );
+
+  $availablesDirs = array();
+  foreach ($directions as $dirObj){
+    if(!in_array_objet($myCoords->addDirection($dirObj),$busyCells, TRUE)){
+      $availablesDirs[] = $dirObj;
+    }
+  }
+  
+  return $availablesDirs;
+}
+
+function scoreDirection($busyCells,$headPOS,$dir){
+  $newBusyCells = $busyCells;
+  $newBusyCells[] = $headPOS->addDirection($dir);
+  return count(get_available_dirs($newBusyCells,$headPOS->addDirection($dir)));
+}
+
+
 switch($params['action']){
 	case "init":
 		echo '{"name":"Stupid AI"}';
@@ -34,39 +80,35 @@ switch($params['action']){
 		
 		foreach($params['board'] as $tail){
 		  foreach($tail as $coord){
-		    $busyCells[] = $coord[0].",".$coord[1];
+		    $busyCells[] = new Coords($coord[0],$coord[1]);
+		  }
+		}
+
+		//get my head coords
+		$myCoords =  new Coords($params['board'][$params['player-index']][0][0],$params['board'][$params['player-index']][0][1]);
+		$availablesDirs = get_available_dirs($busyCells,$myCoords);
+		
+		
+		//score them
+		$majoredAvailableDirs = array();
+		foreach($availablesDirs as $dir){
+		  $score = scoreDirection($busyCells,$myCoords,$dir);
+		  for($i = 0; $i < $score * 10; $i++){
+		    $majoredAvailableDirs[] = $dir;
 		  }
 		}
 		
 		
-		//get my head coords
-		$myCoords = $params['board'][$params['player-index']][0];
-		
-		$x = $myCoords[0];
-		$y = $myCoords[1];
-		
-		$availablesDirs = array();
-		if (!in_array(($x + 1).",".$y, $busyCells)){
-		  $availablesDirs[] = "x+";
-		}
-		if (!in_array(($x -1 ).",".$y, $busyCells)){
-		  $availablesDirs[] = "x-";
-		}
-		if (!in_array($x.",".($y + 1), $busyCells)){
-		  $availablesDirs[] = "y+";
-		}
-		if (!in_array($x.",".($y - 1), $busyCells)){
-		  $availablesDirs[] = "y-";
-		}
-		
-		if(count($availablesDirs) == 0){
+		if(count($majoredAvailableDirs) == 0){
 		  echo '{"play":"x+","comment":"I Loose"}';
-		  //error_log("i ll loose");
+		  error_log("i ll loose");
 		}else{
-		  shuffle($availablesDirs);
-		  echo '{"play":"'.$availablesDirs[0].'"}';
+		  shuffle($majoredAvailableDirs);
+		  echo '{"play":"'.$majoredAvailableDirs[0].'"}';
+		  
+		  //error_log(json_encode($majoredAvailableDirs));
 		}
-		//error_log(json_encode($availablesDirs));
+		
 		break;
 	default:
 		break;
