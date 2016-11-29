@@ -77,7 +77,7 @@ switch($params['action']){
 		
 		//put all non empty coords on array
 		$busyCells = array();
-		error_log ("plop");
+		//error_log ("plop");
 		foreach($params['board'] as $tail){
 		  foreach($tail as $coord){
 		    $busyCells[] = new Coords($coord[0],$coord[1]);
@@ -113,7 +113,7 @@ switch($params['action']){
 		  }  
 		}
 		echo '{"play":"'.$bestChoice .'"}';
-		error_log($bestChoice);
+		//error_log($bestChoice);
 		
 		break;
 	default:
